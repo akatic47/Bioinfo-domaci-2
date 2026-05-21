@@ -1,0 +1,37 @@
+# Sirovi read-ovi pacijenata
+*.fastq
+*.fq
+*.fastq.gz
+*.fq.gz
+
+# Referentni genom i njegovi BWA/GATK indeksi
+*.fa
+*.fasta
+*.fai
+*.dict
+*.amb
+*.ann
+*.bwt
+*.pac
+*.sa
+hg38*
+chr11*
+
+# Fajlovi mapiranja (ogromni međurezultati)
+*.sam
+*.bam
+*.bai
+
+# Poznate varijante i njihovi indeksi
+*.bcf
+*.csi
+*.tbi
+*.idx
+1KG.subset.bcf
+
+# Python sistemski fajlovi
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+gatk-4.5.0.0/
