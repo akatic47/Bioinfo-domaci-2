@@ -1,0 +1,10 @@
+{
+    "fastqc_1": "01_fastqc/sample_0.chrom11.exome.pe1_fastqc.html",
+    "fastqc_2": "01_fastqc/sample_0.chrom11.exome.pe2_fastqc.html",
+    "bam_aligned": "02_alignment/sample_0.sorted.bam",
+    "bam_dedup": "03_processing/sample_0.dedup.bam",
+    "bam_bqsr": "03_processing/sample_0.bqsr.bam",
+    "vcf_raw": "04_variant_calling/sample_0.raw.vcf.gz",
+    "vcf_filtered": "04_variant_calling/sample_0.filtered.vcf.gz",
+    "vcf_pass": "04_variant_calling/sample_0.pass.vcf.gz"
+}
