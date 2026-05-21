@@ -15,23 +15,35 @@
 *.pac
 *.sa
 hg38*
-chr11*
+chr11.fa*
+chr11.dict
 
-# Fajlovi mapiranja (ogromni međurezultati)
+# Fajlovi mapiranja i kalibracije (ogromni međurezultati)
 *.sam
 *.bam
 *.bai
+*.table
+*metrics.txt
 
-# Poznate varijante i njihovi indeksi
+# Poznate varijante i njihovi indeksi (OGROMNI FAJLOVI)
 *.bcf
 *.csi
 *.tbi
 *.idx
 1KG.subset.bcf
+known_sites*
+
+# FastQC ziperi (trebaju nam samo HTML izveštaji)
+*fastqc.zip
+
+# Privremeni fajlovi i logovi
+rename.txt
+logs/
 
 # Python sistemski fajlovi
 __pycache__/
 *.pyc
 .ipynb_checkpoints/
 
+# GATK Alat
 gatk-4.5.0.0/
