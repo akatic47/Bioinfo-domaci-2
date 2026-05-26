@@ -1,0 +1,36 @@
+Predlog strukture za PDF izveštaj
+1. Uvod i opis podataka
+
+Kratak opis: Navedi da su u pitanju upareni FASTQ fajlovi dobijeni sekvenciranjem dela egzoma na hromozomu 11 (iz 1000 Genomes projekta) i da je korišćen referentni genom hg38.
+
+Pokretanje pipeline-a: Dodaj tačnu komandu kojom si pokrenuo skriptu (sa svim argumentima, uključujući --interval chr11).
+
+2. Statistika mapiranja i obrade (BWA-MEM i GATK)
+
+Ukupan broj readova: 6,065,509.
+
+Mapirani readovi: 5,471,110 (90.20%).
+
+Pravilno upareni readovi: 5,396,736 (88.97%).
+
+PCR/optički duplikati: 3.48% (nakon MarkDuplicates koraka).
+
+Grafikon: Ubaci ovde template_length_histogram.png uz kratak opis ispod slike.
+
+3. Identifikacija i filtriranje varijanti (Hard Filtering)
+
+Ukupan broj varijanti (pre filtriranja): 15,012.
+
+Ukupan broj varijanti (posle filtriranja - PASS): 12,756.
+
+SNP varijante: 13,134 pre → 11,245 posle.
+
+INDEL varijante: 1,878 pre → 1,511 posle.
+
+Grafikon: Ubaci variant_comparison.png koji si ranije generisao.
+
+4. Zaključak (Komentar o filtriranju)
+
+Ovo je deo gde objašnjavaš šta se desilo. Odbačeno je tačno 2,256 varijanti (15.03%).
+
+Napiši kratak komentar o tome kako GATK Hard Filtering uklanja lažno pozitivne varijante na osnovu metrika kvaliteta (kao što su Quality by Depth - QD, Fisher Strand - FS, itd.), čime dobijamo pouzdaniji PASS skup za dalju analizu.

@@ -1,75 +1,71 @@
-import gzip
+import pysam
 import matplotlib.pyplot as plt
 
-def analiziraj_varijante(vcf_fajl):
-    raw_snps = 0
-    raw_indels = 0
-    pass_snps = 0
-    pass_indels = 0
-    failed_variants = 0
-
-    print(f"[INFO] Čitam fajl: {vcf_fajl}...")
+def get_vcf_stats(vcf_path):
+    """Parsira VCF fajl i vraća osnovnu statistiku."""
+    vcf = pysam.VariantFile(vcf_path)
     
-    # Otvaramo komprimovani VCF fajl kao običan tekst
-    with gzip.open(vcf_fajl, "rt") as f:
-        for linija in f:
-            # Preskačemo zaglavlje fajla
-            if linija.startswith("#"):
-                continue
-                
-            delovi = linija.strip().split("\t")
-            ref = delovi[3]
-            alt = delovi[4]
-            filter_status = delovi[6]
+    stats = {
+        'total': 0,
+        'snp': 0,
+        'indel': 0
+    }
+    
+    for rec in vcf:
+        stats['total'] += 1
+        # Jednostavna provera da li je SNP (sve alele su dužine 1)
+        is_snp = all(len(allele) == 1 for allele in rec.alleles)
+        if is_snp:
+            stats['snp'] += 1
+        else:
+            stats['indel'] += 1
             
-            # Klasifikacija: Ako su i REF i ALT dužine 1, to je SNP. Inače je INDEL.
-            is_snp = (len(ref) == 1 and len(alt) == 1)
-            
-            # Brojimo sirove varijante (sve koje postoje u fajlu)
-            if is_snp:
-                raw_snps += 1
-            else:
-                raw_indels += 1
-                
-            # Brojimo filtrirane (samo one sa statusom PASS)
-            if filter_status == "PASS" or filter_status == ".":
-                if is_snp:
-                    pass_snps += 1
-                else:
-                    pass_indels += 1
-            else:
-                failed_variants += 1
+    return stats
 
-    # Matematika za izveštaj
-    total_raw = raw_snps + raw_indels
-    total_pass = pass_snps + pass_indels
-    failed_percent = (failed_variants / total_raw) * 100 if total_raw > 0 else 0
+def main():
+    # Putanje do fajlova (prilagodite ako je potrebno)
+    raw_vcf_path = "results/04_variant_calling/sample_0.raw.vcf.gz"
+    pass_vcf_path = "results/04_variant_calling/sample_0.pass.vcf.gz"
+    
+    # 1. Prikupljanje statistike
+    raw_stats = get_vcf_stats(raw_vcf_path)
+    pass_stats = get_vcf_stats(pass_vcf_path)
+    
+    # Računanje dodatnih metrika
+    failed_count = raw_stats['total'] - pass_stats['total']
+    failed_percent = (failed_count / raw_stats['total']) * 100 if raw_stats['total'] > 0 else 0
 
-    # Ispis tražene statistike
-    print("\n=== ZADATAK 2: STATISTIKA VARIJANTI ===")
-    print(f"Ukupan broj sirovih varijanti: {total_raw}")
-    print(f"Ukupan broj PASS varijanti: {total_pass}")
-    print(f"Broj SNP (pre / posle filtriranja): {raw_snps} / {pass_snps}")
-    print(f"Broj INDEL (pre / posle filtriranja): {raw_indels} / {pass_indels}")
-    print(f"Broj varijanti koje nisu prošle filter: {failed_variants}")
+    # 2. Ispis rezultata u terminal (korisno za izveštaj)
+    print("=== Statistika varijanti ===")
+    print(f"Ukupan broj varijanti (pre filtriranja): {raw_stats['total']}")
+    print(f"Ukupan broj varijanti (PASS): {pass_stats['total']}")
+    print(f"Broj varijanti koje nisu prošle filter: {failed_count}")
     print(f"Procenat odbačenih varijanti: {failed_percent:.2f}%")
+    print("-" * 30)
+    print(f"SNP pre filtriranja: {raw_stats['snp']} | SNP posle filtriranja (PASS): {pass_stats['snp']}")
+    print(f"INDEL pre filtriranja: {raw_stats['indel']} | INDEL posle filtriranja (PASS): {pass_stats['indel']}")
 
-    # Pravljenje grafikona koji nosi bodove
-    labele = ['Sirove SNP', 'PASS SNP', 'Sirove INDEL', 'PASS INDEL']
-    vrednosti = [raw_snps, pass_snps, raw_indels, pass_indels]
-    boje = ['#3498db', '#2ecc71', '#e74c3c', '#f1c40f']
+    # 3. Pravljenje grafikona (Bar plot)
+    categories = ['Total', 'SNP', 'INDEL']
+    raw_counts = [raw_stats['total'], raw_stats['snp'], raw_stats['indel']]
+    pass_counts = [pass_stats['total'], pass_stats['snp'], pass_stats['indel']]
 
-    plt.figure(figsize=(9, 6))
-    plt.bar(labele, vrednosti, color=boje)
-    plt.title('Poređenje SNP i INDEL varijanti pre i posle hard filtriranja')
-    plt.ylabel('Broj detektovanih varijanti')
-    plt.grid(axis='y', linestyle='--', alpha=0.7)
-    
-    # Čuvanje slike
-    ime_slike = "grafikon_varijanti.png"
-    plt.savefig(ime_slike)
-    print(f"\n[USPEH] Grafikon je sačuvan u radnom folderu kao '{ime_slike}'")
+    x = range(len(categories))
+    width = 0.35
+
+    fig, ax = plt.subplots(figsize=(8, 5))
+    ax.bar([i - width/2 for i in x], raw_counts, width, label='Sirove (Raw)', color='skyblue')
+    ax.bar([i + width/2 for i in x], pass_counts, width, label='Filtrirane (PASS)', color='lightgreen')
+
+    ax.set_ylabel('Broj varijanti')
+    ax.set_title('Poređenje varijanti pre i posle hard filtering-a')
+    ax.set_xticks(x)
+    ax.set_xticklabels(categories)
+    ax.legend()
+
+    # Čuvanje grafika kao slike (možete je posle ubaciti u PDF izveštaj)
+    plt.savefig('variant_comparison.png')
+    print("\nGrafikon je sačuvan kao 'variant_comparison.png'.")
 
 if __name__ == "__main__":
-    vcf_putanja = "04_variant_calling/sample_0.filtered.vcf.gz"
-    analiziraj_varijante(vcf_putanja)
+    main()

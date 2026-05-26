@@ -1,0 +1,14 @@
+{
+    "pipeline_name": "BWA-GATK Variant Calling Pipeline",
+    "output_directory": "results",
+    "results": {
+        "fastqc_html_1": "results/01_fastqc/sample_0.chrom11.exome.pe1_fastqc.html",
+        "fastqc_html_2": "results/01_fastqc/sample_0.chrom11.exome.pe2_fastqc.html",
+        "sorted_bam": "results/02_alignment/sample_0.sorted.bam",
+        "dedup_bam": "results/03_processing/sample_0.dedup.bam",
+        "bqsr_bam": "results/03_processing/sample_0.bqsr.bam",
+        "raw_vcf": "results/04_variant_calling/sample_0.raw.vcf.gz",
+        "filtered_vcf": "results/04_variant_calling/sample_0.filtered.vcf.gz",
+        "pass_vcf": "results/04_variant_calling/sample_0.pass.vcf.gz"
+    }
+}
