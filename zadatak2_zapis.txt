@@ -1,7 +1,0 @@
-=== ZADATAK 2: STATISTIKA VARIJANTI ===
-Ukupan broj sirovih varijanti: 15544
-Ukupan broj PASS varijanti: 15226
-Broj SNP (pre / posle filtriranja): 13620 / 13401
-Broj INDEL (pre / posle filtriranja): 1924 / 1825
-Broj varijanti koje nisu prošle filter: 318
-Procenat odbačenih varijanti: 2.05%

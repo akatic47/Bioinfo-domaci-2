@@ -1,49 +1,41 @@
-# Sirovi read-ovi pacijenata
-*.fastq
-*.fq
-*.fastq.gz
+# FASTQ ulazni fajlovi
 *.fq.gz
+*.fastq.gz
 
-# Referentni genom i njegovi BWA/GATK indeksi
-*.fa
-*.fasta
-*.fai
-*.dict
-*.amb
-*.ann
-*.bwt
-*.pac
-*.sa
-hg38*
-chr11.fa*
-chr11.dict
+# Referentni genom i BWA indeksi
+reference/
 
-# Fajlovi mapiranja i kalibracije (ogromni međurezultati)
-*.sam
+# Poznate varijante (preveliki)
+known_sites_chr11.vcf.gz
+known_sites_chr11.vcf.gz.tbi
+known_sites_chr11_fixed.vcf.gz
+known_sites_chr11_fixed.vcf.gz.tbi
+
+# GATK folder
+gatk-4.5.0.0/
+
+# BAM/SAM fajlovi
 *.bam
 *.bai
-*.table
-*metrics.txt
+*.sam
 
-# Poznate varijante i njihovi indeksi (OGROMNI FAJLOVI)
-*.bcf
-*.csi
-*.tbi
-*.idx
-1KG.subset.bcf
-known_sites*
+# Logovi
+results/logs/
 
-# FastQC ziperi (trebaju nam samo HTML izveštaji)
-*fastqc.zip
+# BAM rezultati (preveliki za GitHub)
+results/02_alignment/
+results/03_processing/
 
-# Privremeni fajlovi i logovi
-rename.txt
-logs/
+# Privremeni fajlovi
+*.tmp
+*.tmp.bam
+*.tmp.sam
+.*.done
 
-# Python sistemski fajlovi
+# Python cache
 __pycache__/
 *.pyc
-.ipynb_checkpoints/
 
-# GATK Alat
-gatk-4.5.0.0/
+# Razno
+rename.txt
+results_manifest.json
